@@ -6,7 +6,7 @@ from ultralytics import YOLOv10
 
 from helpers.camera_helper import CameraHelper
 # from helpers.serial_helper import SerialHelper
-from helpers.database.sqlite_helper import SQLiteHelper
+from lib.callback import Log
 
 class App:
     def __init__(self, window, window_title):
@@ -14,8 +14,7 @@ class App:
         self.bounding_box_annotator = sv.BoundingBoxAnnotator()
         self.label_annotator = sv.LabelAnnotator()
 
-        self.sqlite = SQLiteHelper("assets/databases/log.db")
-        self.sqlite.connect()
+        self.log = Log()
 
         self.window = window
         self.window.title(window_title)
@@ -39,6 +38,12 @@ class App:
         frame = self.camera_helper.capture_frame()
         results = self.model(frame)[0]
         detections = sv.Detections.from_ultralytics(results)
+
+        print(detections.data['class_name'])
+        if 'coca-cola' in detections.data['class_name']:
+            self.log.add_log(1)
+        else:
+            self.log.add_log(0)
 
         annotated_image = self.bounding_box_annotator.annotate(
             scene=frame, detections=detections)
