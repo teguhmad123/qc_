@@ -1,11 +1,18 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 
+import supervision as sv
+from ultralytics import YOLOv10
+
 from helpers.camera_helper import CameraHelper
 # from helpers.serial_helper import SerialHelper
 
 class App:
     def __init__(self, window, window_title):
+        self.model = YOLOv10(f'model/best.pt')
+        self.bounding_box_annotator = sv.BoundingBoxAnnotator()
+        self.label_annotator = sv.LabelAnnotator()
+
         self.window = window
         self.window.title(window_title)
 
@@ -26,6 +33,13 @@ class App:
     def update(self):
         # Read a frame from the video capture
         frame = self.camera_helper.capture_frame()
+        results = self.model(frame)[0]
+        detections = sv.Detections.from_ultralytics(results)
+
+        annotated_image = self.bounding_box_annotator.annotate(
+            scene=frame, detections=detections)
+        annotated_image = self.label_annotator.annotate(
+            scene=annotated_image, detections=detections)
 
         # Convert the frame from OpenCV to PIL format
         rgb_frame = self.camera_helper.rgb_frame(frame)
