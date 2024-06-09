@@ -1,0 +1,6 @@
+opencv_python==4.9.0.80
+opencv_python_headless==4.10.0.82
+Pillow==10.3.0
+pyserial==3.5
+supervision==0.21.0
+ultralytics==8.1.34

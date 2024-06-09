@@ -6,12 +6,16 @@ from ultralytics import YOLOv10
 
 from helpers.camera_helper import CameraHelper
 # from helpers.serial_helper import SerialHelper
+from helpers.database.sqlite_helper import SQLiteHelper
 
 class App:
     def __init__(self, window, window_title):
-        self.model = YOLOv10(f'model/best.pt')
+        self.model = YOLOv10(f'assets/model/best.pt')
         self.bounding_box_annotator = sv.BoundingBoxAnnotator()
         self.label_annotator = sv.LabelAnnotator()
+
+        self.sqlite = SQLiteHelper("assets/databases/log.db")
+        self.sqlite.connect()
 
         self.window = window
         self.window.title(window_title)
