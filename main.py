@@ -15,6 +15,7 @@ class App:
         self.label_annotator = sv.LabelAnnotator()
 
         self.log = Log()
+        self.log.add_log_server()
 
         self.window = window
         self.window.title(window_title)

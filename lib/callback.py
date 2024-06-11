@@ -1,5 +1,7 @@
 from helpers.database.sqlite_helper import SQLiteHelper
+from helpers.config_helper import config
 from datetime import datetime
+import requests
 
 class Log:
     def __init__(self, db_name="assets/databases/log.db"):
@@ -21,6 +23,19 @@ class Log:
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         insert_query = "INSERT INTO logs (date, status) VALUES (?, ?)"
         self.db_helper.execute_query(insert_query, (date, status))
+
+    def add_log_server(self):
+        datas = self.get_logs()
+        for data in datas:
+            dt = {'id_machine': config.get('id_machine', '9999'), 'date': data[1], 'status': data[2]}
+            response = requests.post(config.get('url_server', 'http://localhost/qc_web/') + 'api/log', data=dt)
+
+            if response.status_code == 201:
+                print('Permintaan berhasil!')
+            else:
+                print('Permintaan gagal:', response.status_code)
+            # Melihat isi respon
+            print(response.text)
 
     def get_logs(self):
         select_query = "SELECT * FROM logs"
