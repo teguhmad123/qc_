@@ -41,3 +41,12 @@ class CameraHelper:
 
     def wait_key(self, delay=1):
         return cv2.waitKey(delay) & 0xFF
+
+    def list_cameras(max_cameras=10):
+        available_cameras = []
+        for i in range(10):
+            cap = cv2.VideoCapture(i)
+            if cap.isOpened():
+                available_cameras.append(i)
+                cap.release()
+        return available_cameras
