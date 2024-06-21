@@ -35,8 +35,11 @@ class App:
         self.video_label2 = tk.Label(window)
         self.video_label2.pack(side=tk.LEFT, padx=10, pady=10)
 
-        self.text_label = tk.Label(window, text="Hello World", font=("Arial", 12))
-        self.text_label.pack(side=tk.RIGHT, padx=10, pady=10)
+        self.text_label = tk.Label(window, text=f"Good : {self.log.good}" , font=("Arial", 12))
+        self.text_label.pack()
+
+        self.text_label = tk.Label(window, text=f"Not Good : {self.log.notGood}" , font=("Arial", 12))
+        self.text_label.pack()
 
         self.update()
 
@@ -48,8 +51,8 @@ class App:
 
         if 'coca-cola' in detections.data['class_name']:
             self.log.add_log(1)
-        else:
-            self.log.add_log(0)
+        # else:
+            # self.log.add_log(0)
 
         annotated_image = self.bounding_box_annotator.annotate(
             scene=frame, detections=detections)
@@ -74,8 +77,8 @@ class App:
 
         if 'coca-cola' in detections2.data['class_name']:
             self.log.add_log(1)
-        else:
-            self.log.add_log(0)
+        # else:
+            # self.log.add_log(0)
 
         annotated_image2 = self.bounding_box_annotator.annotate(
             scene=frame2, detections=detections2)

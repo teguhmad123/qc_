@@ -20,7 +20,7 @@ class SQLiteHelper:
             else:
                 cursor.execute(query)
             self.connection.commit()
-            print("Query executed successfully")
+            # print("Query executed successfully")
         except sqlite3.Error as e:
             print(f"Error executing query: {e}")
             self.connection.rollback()

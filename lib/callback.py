@@ -4,10 +4,18 @@ from datetime import datetime
 import requests
 
 class Log:
+    good = 0
+    notGood = 0
     def __init__(self, db_name="assets/databases/log.db"):
         self.db_helper = SQLiteHelper(db_name)
         self.db_helper.connect()
         self.create_log_table()
+        datas = self.get_logs()
+        for data in datas:
+            if(data[2] == "1"):
+                self.good+=1
+            if(data[2] == "0"):
+                self.notGood+=1
 
     def create_log_table(self):
         create_table_query = """
@@ -23,6 +31,10 @@ class Log:
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         insert_query = "INSERT INTO logs (date, status) VALUES (?, ?)"
         self.db_helper.execute_query(insert_query, (date, status))
+        if(status == 1):
+            self.good += 1
+        if(status == 0):
+            self.notGood += 1
 
     def add_log_server(self):
         datas = self.get_logs()
