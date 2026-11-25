@@ -2,7 +2,8 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 import supervision as sv
-from ultralytics import YOLOv10
+from ultralytics import YOLO
+from trackers import ByteTrackTracker
 
 import cv2
 from helpers.camera_helper import CameraHelper
@@ -11,11 +12,11 @@ from lib.callback import Log
 
 class App:
     def __init__(self, window, window_title):
-        self.model = YOLOv10(f'assets/model/best.pt')
-        self.bounding_box_annotator = sv.BoundingBoxAnnotator()
+        self.model = YOLO(f'assets/model/best.pt')
+        self.bounding_box_annotator = sv.BoxAnnotator()
         self.label_annotator = sv.LabelAnnotator()
-        self.tracker = sv.ByteTrack()
-        self.tracker2 = sv.ByteTrack()
+        self.tracker = ByteTrackTracker()
+        self.tracker2 = ByteTrackTracker()
 
         self.log = Log()
         self.log.add_log_server()
